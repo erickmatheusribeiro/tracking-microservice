@@ -1,4 +1,4 @@
-# Sistema de Gerenciamento de Clientes (Customers) - Desafio Tech Challenge - Fase 4
+# Sistema de Gerenciamento de Entregas (Tracking) - Desafio Tech Challenge - Fase 4
 
 Este repositório refere-se ao microsserviço de logística. No total, o projeto envolve 4 microsserviços, sendo eles:
 
