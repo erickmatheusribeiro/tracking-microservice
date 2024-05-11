@@ -1,4 +1,4 @@
-package com.tracking.management.system.trackingmicroservice.dto.viacep;
+package com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.viacep;
 
 import lombok.Data;
 

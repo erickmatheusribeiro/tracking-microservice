@@ -1,6 +1,6 @@
-package com.tracking.management.system.trackingmicroservice.service;
+package com.tracking.management.system.trackingmicroservice.interfaceadapters.controller;
 
-import com.tracking.management.system.trackingmicroservice.dto.viacep.ViaCepResponse;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.viacep.ViaCepResponse;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
-public class ViaCepService {
+public class ViaCepController {
 
     private static HttpHeaders getHttpHeaders() {
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();

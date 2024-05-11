@@ -1,4 +1,4 @@
-package com.tracking.management.system.trackingmicroservice.dto;
+package com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto;
 
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
 import lombok.Data;

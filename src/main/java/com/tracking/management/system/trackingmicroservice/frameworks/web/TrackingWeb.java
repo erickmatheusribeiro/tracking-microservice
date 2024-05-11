@@ -1,7 +1,7 @@
-package com.tracking.management.system.trackingmicroservice.controller;
+package com.tracking.management.system.trackingmicroservice.frameworks.web;
 
-import com.tracking.management.system.trackingmicroservice.dto.DeliveryDto;
-import com.tracking.management.system.trackingmicroservice.service.TrackingService;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.DeliveryDto;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TrackingGateway;
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import org.modelmapper.ModelMapper;
@@ -13,9 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/tracking")
 @RestController
 @Tag(name = "Tracking", description = "Métodos para listar, incluir e alterar o status de uma entrega")
-public class TrackingController {
+public class TrackingWeb {
     @Autowired
-    private TrackingService service;
+    private TrackingGateway service;
 
     @Autowired
     private ModelMapper modelMapper;

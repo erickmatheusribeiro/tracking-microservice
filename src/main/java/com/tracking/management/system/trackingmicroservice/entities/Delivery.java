@@ -1,4 +1,4 @@
-package com.tracking.management.system.trackingmicroservice.model;
+package com.tracking.management.system.trackingmicroservice.entities;
 
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
 import jakarta.persistence.*;

@@ -1,13 +1,15 @@
-package com.tracking.management.system.trackingmicroservice.service;
+package com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways;
 
-import com.tracking.management.system.trackingmicroservice.dto.DeliveryDto;
-import com.tracking.management.system.trackingmicroservice.dto.TarifDto;
-import com.tracking.management.system.trackingmicroservice.dto.viacep.ViaCepResponse;
-import com.tracking.management.system.trackingmicroservice.model.Delivery;
-import com.tracking.management.system.trackingmicroservice.model.Tarif;
-import com.tracking.management.system.trackingmicroservice.repository.DeliveryRepository;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.TarifPresenter;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.TrackingPresenter;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.DeliveryDto;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.TarifDto;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.viacep.ViaCepResponse;
+import com.tracking.management.system.trackingmicroservice.entities.Delivery;
+import com.tracking.management.system.trackingmicroservice.entities.Tarif;
+import com.tracking.management.system.trackingmicroservice.frameworks.db.DeliveryRepository;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.controller.ViaCepController;
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +19,21 @@ import java.util.Random;
 
 
 @Service
-public class TrackingService {
+public class TrackingGateway {
     @Autowired
     private DeliveryRepository repository;
 
     @Autowired
-    private TarifService tarifService;
+    private TarifGateway tarifService;
 
     @Autowired
-    private ViaCepService viaCepService;
+    private ViaCepController viaCepService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private TrackingPresenter trackingPresenter;
+
+    @Autowired
+    private TarifPresenter tarifPresenter;
 
     public ResponseEntity<?> findByTrackingCode(String code){
         Delivery delivery = findTrackingCode(code);
@@ -44,7 +49,7 @@ public class TrackingService {
         ViaCepResponse response = viaCepService.validCep(cep);
         Tarif tarif = tarifService.findByUf(response.getUf());
 
-        return modelMapper.map(tarif, TarifDto.class);
+        return tarifPresenter.mapToDto(tarif);
     }
 
     public Delivery findTrackingCode (String code){
@@ -71,7 +76,7 @@ public class TrackingService {
 
         repository.save(entity);
 
-        return modelMapper.map(entity, DeliveryDto.class);
+        return trackingPresenter.mapToDto(entity);
     }
 
     public DeliveryDto deleteDelivery(String code){
@@ -80,7 +85,7 @@ public class TrackingService {
         entity.setStatus(Status.CANCELADO);
         repository.save(entity);
 
-        return modelMapper.map(entity, DeliveryDto.class);
+        return trackingPresenter.mapToDto(entity);
     }
 
     public ResponseEntity<?> updateDelivery(String code, Status status){
@@ -89,7 +94,7 @@ public class TrackingService {
         entity.setStatus(status);
         repository.save(entity);
 
-        return ResponseEntity.ok(modelMapper.map(entity, DeliveryDto.class));
+        return ResponseEntity.ok(trackingPresenter.mapToDto(entity));
     }
 
 

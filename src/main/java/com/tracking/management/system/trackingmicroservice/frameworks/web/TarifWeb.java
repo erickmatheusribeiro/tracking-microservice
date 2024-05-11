@@ -1,8 +1,8 @@
-package com.tracking.management.system.trackingmicroservice.controller;
+package com.tracking.management.system.trackingmicroservice.frameworks.web;
 
-import com.tracking.management.system.trackingmicroservice.dto.TarifDto;
-import com.tracking.management.system.trackingmicroservice.service.TarifService;
-import com.tracking.management.system.trackingmicroservice.service.TrackingService;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.TarifDto;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TarifGateway;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TrackingGateway;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tarif")
 @RestController
 @Tag(name = "Tarif", description = "Métodos para incluir uma tarifa de entrega")
-public class TarifController {
+public class TarifWeb {
     @Autowired
-    private TarifService service;
+    private TarifGateway service;
 
     @Autowired
-    private TrackingService trackingService;
+    private TrackingGateway trackingService;
 
     @Operation(summary = "Efetuar a inclusão de uma tarifa")
     @PostMapping
