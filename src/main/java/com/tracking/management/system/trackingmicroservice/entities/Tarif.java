@@ -16,5 +16,6 @@ public class Tarif {
     @Column(length = 2)
     private String uf;
     private double value;
+    private double valuePerGR;
     private int deadline;
 }

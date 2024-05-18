@@ -1,20 +1,19 @@
 package com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways;
 
-import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.TarifPresenter;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.TrackingPresenter;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.DeliveryDto;
-import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.TarifDto;
-import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.viacep.ViaCepResponse;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.ShipmentDto;
 import com.tracking.management.system.trackingmicroservice.entities.Delivery;
 import com.tracking.management.system.trackingmicroservice.entities.Tarif;
 import com.tracking.management.system.trackingmicroservice.frameworks.db.DeliveryRepository;
-import com.tracking.management.system.trackingmicroservice.interfaceadapters.controller.ViaCepController;
+import com.tracking.management.system.trackingmicroservice.usercase.CalcShipmentUsercase;
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 
 
@@ -26,14 +25,13 @@ public class TrackingGateway {
     @Autowired
     private TarifGateway tarifService;
 
-    @Autowired
-    private ViaCepController viaCepService;
 
     @Autowired
     private TrackingPresenter trackingPresenter;
 
+
     @Autowired
-    private TarifPresenter tarifPresenter;
+    private CalcShipmentUsercase calcShipmentUsercase;
 
     public ResponseEntity<?> findByTrackingCode(String code){
         Delivery delivery = findTrackingCode(code);
@@ -45,22 +43,15 @@ public class TrackingGateway {
         return ResponseEntity.ok(delivery);
     }
 
-    public TarifDto listCep(String cep){
-        ViaCepResponse response = viaCepService.validCep(cep);
-        Tarif tarif = tarifService.findByUf(response.getUf());
-
-        return tarifPresenter.mapToDto(tarif);
-    }
-
     public Delivery findTrackingCode (String code){
         Delivery delivery = repository.findByTrakingCodeEquals(code);
         return delivery;
     }
 
-    public DeliveryDto insertDelivery(String cep, Integer clienteId){
+    public DeliveryDto insertDelivery(String cep, Integer clienteId, List<ShipmentDto> dto){
         Delivery entity = new Delivery();
 
-        Tarif tarif = tarifService.findByUf(listCep(cep).getUf().toString());
+        Tarif tarif = tarifService.findByUf(tarifService.findByCep(cep).getUf().toString());
 
         String trackingCode = generateTrackingCode();
         while(findTrackingCode(trackingCode) != null){
@@ -73,6 +64,10 @@ public class TrackingGateway {
         entity.setDateCreate(LocalDate.now());
         entity.setTrakingCode(trackingCode);
         entity.setDateEnd(LocalDate.now().plusDays(tarif.getDeadline()));
+        entity.setValue(calcShipmentUsercase.calcShipment(dto, tarif));
+        entity.setItens(calcShipmentUsercase.findListItens(dto));
+//        entity.setItens();
+
 
         repository.save(entity);
 
