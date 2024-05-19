@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class DeliveryDto {
     private String trakingCode;
     private Status status;
+    private double value;
     private LocalDate dateEnd;
 
 }

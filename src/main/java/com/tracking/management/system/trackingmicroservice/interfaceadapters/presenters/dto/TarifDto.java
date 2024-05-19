@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class TarifDto {
     private States uf;
     private double value;
+    private double valuePerGr;
     private int deadline;
 }
