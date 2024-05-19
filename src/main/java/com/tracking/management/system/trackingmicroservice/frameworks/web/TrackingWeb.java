@@ -5,7 +5,6 @@ import com.tracking.management.system.trackingmicroservice.interfaceadapters.gat
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.ShipmentDto;
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,9 @@ public class TrackingWeb {
 
     @Operation(summary = "Incluir uma entrega")
     @PostMapping
-    public ResponseEntity<DeliveryDto> insertDelivery(@RequestParam String cep, @RequestParam Integer id, @RequestBody List<ShipmentDto> dto) {
+    public ResponseEntity<DeliveryDto> insertDelivery(@RequestParam(name = "cep") String cep,
+                                                      @RequestParam(name = "order") Integer id,
+                                                      @RequestBody List<ShipmentDto> dto) {
         return ResponseEntity.ok(service.insertDelivery(cep, id, dto));
     }
 

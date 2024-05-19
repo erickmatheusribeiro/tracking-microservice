@@ -1,5 +1,6 @@
 package com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tracking.management.system.trackingmicroservice.entities.Item;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemDto {
     private String sku;
     private double productHeight;

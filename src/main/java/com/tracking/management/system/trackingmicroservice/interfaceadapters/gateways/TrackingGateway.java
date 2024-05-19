@@ -8,6 +8,7 @@ import com.tracking.management.system.trackingmicroservice.entities.Tarif;
 import com.tracking.management.system.trackingmicroservice.frameworks.db.DeliveryRepository;
 import com.tracking.management.system.trackingmicroservice.usercase.CalcShipmentUsercase;
 import com.tracking.management.system.trackingmicroservice.util.enums.Status;
+import com.tracking.management.system.trackingmicroservice.util.exception.ExternalInterfaceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class TrackingGateway {
         entity.setDateCreate(LocalDate.now());
         entity.setTrakingCode(trackingCode);
         entity.setDateEnd(LocalDate.now().plusDays(tarif.getDeadline()));
-        entity.setValue(calcShipmentUsercase.calcShipment(dto, tarif));
+//        entity.setValue(calcShipmentUsercase.calcShipment(dto, tarif));
         entity.setItens(calcShipmentUsercase.findListItens(dto));
 
         repository.save(entity);

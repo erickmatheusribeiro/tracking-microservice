@@ -45,7 +45,7 @@ public class ProductWeb {
         return productWebInterface.findProductsBySku(sku);
     }
 
-    public Double getWeightBySku(String sku) throws ExternalInterfaceException {
+    public Double getWeightBySku(String sku) {
         Item dto = presenter.convert(getProductBySku(sku));
         return dto.getProductWeight();
     }
