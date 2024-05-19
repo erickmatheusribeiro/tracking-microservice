@@ -1,4 +1,4 @@
-package com.tracking.management.system.trackingmicroservice.frameworks.external.interfaces.client.ordening;
+package com.tracking.management.system.trackingmicroservice.frameworks.external.interfaces.ordening;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

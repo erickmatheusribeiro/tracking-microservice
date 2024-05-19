@@ -3,6 +3,7 @@ package com.tracking.management.system.trackingmicroservice.frameworks.web;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.ShipmentDto;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.TarifDto;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TarifGateway;
+import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.TesteDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,15 +27,15 @@ public class TarifWeb {
     }
 
     @Operation(summary = "Listar tarifa e prazo de entrega")
-    @GetMapping
-    public ResponseEntity<TarifDto> validCep(@RequestParam String cep) {
+    @GetMapping("/{cep}")
+    public ResponseEntity<TarifDto> validCep(@PathVariable String cep) {
         return ResponseEntity.ok(service.findByCep(cep));
     }
 
     @Operation(summary = "Calcular valor e prazo de entrega")
-    @GetMapping("/shipment")
-    public ResponseEntity<TarifDto> calculateShipment(@RequestParam String cep,
-                                                      @Valid @RequestBody List<ShipmentDto> dto) {
+    @GetMapping("/shipment/{cep}")
+    public ResponseEntity<TarifDto> calculateShipment(@PathVariable String cep,
+                                                      @RequestBody List<ShipmentDto> dto) {
         return ResponseEntity.ok(service.calculateTarif(cep, dto));
     }
 

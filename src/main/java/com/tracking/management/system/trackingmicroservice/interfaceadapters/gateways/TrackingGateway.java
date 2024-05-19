@@ -66,8 +66,6 @@ public class TrackingGateway {
         entity.setDateEnd(LocalDate.now().plusDays(tarif.getDeadline()));
         entity.setValue(calcShipmentUsercase.calcShipment(dto, tarif));
         entity.setItens(calcShipmentUsercase.findListItens(dto));
-//        entity.setItens();
-
 
         repository.save(entity);
 
