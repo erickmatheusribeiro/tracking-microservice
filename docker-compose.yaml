@@ -1,0 +1,50 @@
+services:
+#  postgres:
+#    image: postgres:16.0
+#    container_name: postgres
+#    restart: unless-stopped
+#    volumes:
+#      - order-database:/var/lib/postgresql/data
+#    networks:
+#      - tracking-service-network
+#    environment:
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#      POSTGRES_USER: ${POSTGRES_USERNAME}
+#      POSTGRES_DB: ${POSTGRES_DATABASE}
+#    ports:
+#      - 8083:5432
+#
+#  pgadmin:
+#    image: dpage/pgadmin4:8.0
+#    container_name: pgadmin
+#    volumes:
+#      - ./servers.json:/pgadmin4/servers.json
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+#    ports:
+#      - 8081:80
+#    depends_on:
+#      - postgres
+#    networks:
+#      - tracking-service-network
+
+  rabbitMQ:
+    image: rabbitmq:3.13-management
+    container_name: rabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - 8082:5672
+      - 8085:15672
+#    networks:
+#      - tracking-service-network
+#
+#networks:
+#  tracking-service-network:
+#    external: true
+#    name: tracking-management-network
+
+#volumes:
+#  order-database:
