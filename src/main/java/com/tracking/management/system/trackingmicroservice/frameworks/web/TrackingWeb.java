@@ -1,9 +1,10 @@
 package com.tracking.management.system.trackingmicroservice.frameworks.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.DeliveryDto;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TrackingGateway;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.ShipmentDto;
-import com.tracking.management.system.trackingmicroservice.util.enums.Status;
+import com.tracking.management.system.trackingmicroservice.util.enums.TrackingStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,21 +33,21 @@ public class TrackingWeb {
     @Operation(summary = "Incluir uma entrega")
     @PostMapping
     public ResponseEntity<DeliveryDto> insertDelivery(@RequestParam(name = "cep") String cep,
-                                                      @RequestParam(name = "order") Integer id,
+                                                      @RequestParam(name = "order") String orderId,
                                                       @RequestBody List<ShipmentDto> dto) {
-        return ResponseEntity.ok(service.insertDelivery(cep, id, dto));
+        return ResponseEntity.ok(service.insertDelivery(cep, orderId, dto));
     }
 
     @Operation(summary = "Efetuar a alteração do status de uma entrega")
     @PutMapping
     public ResponseEntity<?> updateStatusDelivery(@RequestParam String code,
-                                                  @RequestParam Status status){
+                                                  @RequestParam TrackingStatus status) throws JsonProcessingException {
         return service.updateDelivery(code, status);
     }
 
     @Operation(summary = "Cancelar uma entrega")
     @DeleteMapping
-    public ResponseEntity<DeliveryDto> deleteDelivery(@RequestParam String code) {
+    public ResponseEntity<DeliveryDto> deleteDelivery(@RequestParam String code) throws JsonProcessingException {
         return ResponseEntity.ok(service.deleteDelivery(code));
     }
 

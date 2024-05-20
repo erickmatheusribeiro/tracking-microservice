@@ -9,9 +9,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("ordering-microservice")
 public interface OrdeningWebInterface {
 
-    @PutMapping("/api/v1/order/status/{id}")
-    void updateStatusOrder(@PathVariable Integer id,
-                           @RequestParam String trackingNumber,
-                           @RequestParam String urlTracking);
+    @PutMapping(value="/api/v1/order/status/")
+    void updateStatusOrderCanceled(@RequestParam Integer orderId);
+
+    @PutMapping(value="/api/v1/order/status/ON_CARRIAGE/{id}")
+    void updateStatusOrderOnCarrier(@PathVariable Integer id,
+                                    @RequestParam String trackingNumber,
+                                    @RequestParam String urlTracking);
+
+    @PutMapping(value="/api/v1/order/status/DELIVERED/{id}")
+    void updateStatusOrderDelivered(@PathVariable Integer orderId);
 
 }

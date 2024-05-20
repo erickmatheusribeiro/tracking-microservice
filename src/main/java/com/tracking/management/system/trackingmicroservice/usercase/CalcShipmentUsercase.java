@@ -27,12 +27,16 @@ public class CalcShipmentUsercase {
         double valueShipment = dto.stream().mapToDouble(
                 shipmentDto ->
                 {
-                    return (
-                            productWeb.getWeightBySku(shipmentDto.getSku())
-                                    * shipmentDto.getQuantity()
-                    )
-                            * tarif.getValuePerGR()
-                            + tarif.getValue();
+                    try {
+                        return (
+                                productWeb.getWeightBySku(shipmentDto.getSku())
+                                        * shipmentDto.getQuantity()
+                        )
+                                * tarif.getValuePerGR()
+                                + tarif.getValue();
+                    } catch (ExternalInterfaceException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
         ).sum();
 
@@ -43,8 +47,12 @@ public class CalcShipmentUsercase {
         List<Item> itensDto = new ArrayList<>();
 
         dto.forEach(item -> {
+            try {
                 itensDto.add(
                         itemPresenter.mapToEntity(productWeb.getProductBySku(item.getSku().toString())));
+            } catch (ExternalInterfaceException e) {
+                throw new RuntimeException(e);
+            }
 
         });
 

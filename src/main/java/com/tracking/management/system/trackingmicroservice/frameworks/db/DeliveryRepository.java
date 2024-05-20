@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     Delivery findByTrakingCodeEquals(String trakingCode);
+
+    Delivery findByOrderIdEquals(String orderId);
 }

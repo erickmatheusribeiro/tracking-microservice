@@ -1,6 +1,6 @@
 package com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto;
 
-import com.tracking.management.system.trackingmicroservice.util.enums.Status;
+import com.tracking.management.system.trackingmicroservice.util.enums.TrackingStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 public class DeliveryDto {
     private String trakingCode;
-    private Status status;
+    private TrackingStatus status;
     private double value;
     private LocalDate dateEnd;
 

@@ -15,62 +15,46 @@ import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 
 
 @Configuration
-public class MessagingConfig {
-    private final CachingConnectionFactory cachingConnectionFactory;
+public class MessagingBeans {
 
-    @Value("${messaging.queue.client}")
-    private String clientValidateQueue;
+    private final CachingConnectionFactory cachingConnectionFactory;
 
     @Value("${messaging.queue.status}")
     private String statusUpdateQueue;
 
-    @Value("${messaging.queue.stock}")
-    private String stockProcessQueue;
+    @Value("${messaging.queue.transportation}")
+    private String logisticsProcessQueue;
 
-    @Value("${messaging.queue.stock.cancelation}")
-    private String stockUpdateQueue;
+    private static final String EXCHANGE_FALLBACK = "x.process-failure";
 
-    @Value("${messaging.queue.payment}")
-    private String paymentProcessQueue;
+    private static final String EXCHANGE_FALLBACK_STATUS = "x.process-failure-status";
 
-    @Value("${messaging.queue.transportation.cancel}")
-    private String transportSendCancelation;
+    private static final String QUEUE_FALLBACK = "q.fall-back-process";
 
-    public MessagingConfig(CachingConnectionFactory cachingConnectionFactory) {
+    private static final String QUEUE_FALLBACK_STATUS = "q.fall-back-process-status";
+
+    private static final String DEAD_LETTER_EXCHANGE_KEY = "x-dead-letter-exchange";
+
+    private static final String DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
+
+    public MessagingBeans(CachingConnectionFactory cachingConnectionFactory) {
         this.cachingConnectionFactory = cachingConnectionFactory;
     }
 
     @Bean
-    public Queue createClientValidateQueue() {
-        return QueueBuilder.durable(clientValidateQueue)
-                .withArgument("x-dead-letter-exchange", "x.process-failure")
-                .withArgument("x-dead-letter-routing-key", "client")
+    public Queue createStatusUpdateQueue() {
+        return QueueBuilder.durable(statusUpdateQueue)
+                .withArgument(DEAD_LETTER_EXCHANGE_KEY, EXCHANGE_FALLBACK_STATUS)
+                .withArgument(DEAD_LETTER_ROUTING_KEY, "status")
                 .build();
     }
 
     @Bean
-    public Queue createStatusUpdateQueue() {
-        return new Queue(statusUpdateQueue, true);
-    }
-
-    @Bean
-    public Queue createStockProcessQueue() {
-        return new Queue(stockProcessQueue, true);
-    }
-
-    @Bean
-    public Queue createStockCancelationQueue() {
-        return new Queue(stockUpdateQueue, true);
-    }
-
-    @Bean
-    public Queue createPaymentProcessQueue() {
-        return new Queue(paymentProcessQueue, true);
-    }
-
-    @Bean
     public Queue createTransportationCancelQueue() {
-        return new Queue(transportSendCancelation, true);
+        return QueueBuilder.durable(logisticsProcessQueue)
+                .withArgument(DEAD_LETTER_EXCHANGE_KEY, EXCHANGE_FALLBACK)
+                .withArgument(DEAD_LETTER_ROUTING_KEY, "logistics")
+                .build();
     }
 
     @Bean
@@ -96,9 +80,18 @@ public class MessagingConfig {
     @Bean
     public Declarables createDeadLetterSchema() {
         return new Declarables(
-                new DirectExchange("x.process-failure"),
-                new Queue("q.fall-back-process"),
-                new Binding("q.fall-back-process", Binding.DestinationType.QUEUE, "x.process-failure", "client", null)
+                new DirectExchange(EXCHANGE_FALLBACK),
+                new Queue(QUEUE_FALLBACK),
+                new Binding(QUEUE_FALLBACK, Binding.DestinationType.QUEUE, EXCHANGE_FALLBACK, "logistics", null)
+        );
+    }
+
+    @Bean
+    public Declarables createDeadLetterStatusUpdate() {
+        return new Declarables(
+                new DirectExchange(EXCHANGE_FALLBACK_STATUS),
+                new Queue(QUEUE_FALLBACK_STATUS),
+                new Binding(QUEUE_FALLBACK_STATUS, Binding.DestinationType.QUEUE, EXCHANGE_FALLBACK_STATUS, "status", null)
         );
     }
 
@@ -114,5 +107,5 @@ public class MessagingConfig {
 
         return rabbitTemplate;
     }
-
 }
+

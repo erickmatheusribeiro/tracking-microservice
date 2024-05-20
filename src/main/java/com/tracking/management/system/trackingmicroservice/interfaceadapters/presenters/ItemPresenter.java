@@ -8,14 +8,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ItemPresenter {
-    @Autowired
-    private ModelMapper modelMapper;
-
-    public ItemDto mapToDto (Item entity){
-        return modelMapper.map(entity, ItemDto.class);
-    }
 
     public Item mapToEntity (ItemDto dto){
-        return modelMapper.map(dto, Item.class);
+        Item entity = new Item();
+
+        entity.setSku(dto.getSku());
+        entity.setPackagingDepth(dto.getPackagingDepth());
+        entity.setPackagingWidth(dto.getPackagingWidth());
+        entity.setPackagingHeight(dto.getPackagingHeight());
+        entity.setPackagingWeight(dto.getPackagingWeight());
+        entity.setProductDepth(dto.getProductDepth());
+        entity.setProductWidth(dto.getProductWidth());
+        entity.setProductHeight(dto.getProductHeight());
+        entity.setProductWeight(dto.getProductWeight());
+
+        return entity;
     }
 }

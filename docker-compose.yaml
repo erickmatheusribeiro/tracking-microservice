@@ -4,7 +4,7 @@ services:
 #    container_name: postgres
 #    restart: unless-stopped
 #    volumes:
-#      - order-database:/var/lib/postgresql/data
+#      - tracking-database:/var/lib/postgresql/data
 #    networks:
 #      - tracking-service-network
 #    environment:
@@ -47,4 +47,4 @@ services:
 #    name: tracking-management-network
 
 #volumes:
-#  order-database:
+#  tracking-database:

@@ -8,14 +8,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TarifPresenter {
-    @Autowired
-    private ModelMapper modelMapper;
 
     public TarifDto mapToDto(Tarif entity){
-        return modelMapper.map(entity, TarifDto.class);
+        TarifDto dto = new TarifDto();
+
+        dto.setUf(entity.getUf());
+        dto.setValue(entity.getValue());
+        dto.setValuePerGr(entity.getValuePerGR());
+        dto.setDeadline(entity.getDeadline());
+
+        return dto;
     }
 
     public Tarif mapToEntity(TarifDto dto){
-        return modelMapper.map(dto, Tarif.class);
+        Tarif entity = new Tarif();
+
+        entity.setUf(dto.getUf());
+        entity.setValue(dto.getValue());
+        entity.setValuePerGR(dto.getValuePerGr());
+        entity.setDeadline(dto.getDeadline());
+
+        return entity;
     }
 }
