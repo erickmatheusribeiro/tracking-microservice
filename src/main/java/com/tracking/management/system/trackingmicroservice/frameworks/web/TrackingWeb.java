@@ -1,5 +1,6 @@
 package com.tracking.management.system.trackingmicroservice.frameworks.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.DeliveryDto;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.gateways.TrackingGateway;
 import com.tracking.management.system.trackingmicroservice.interfaceadapters.presenters.dto.ShipmentDto;
@@ -40,7 +41,7 @@ public class TrackingWeb {
     @Operation(summary = "Efetuar a alteração do status de uma entrega")
     @PutMapping
     public ResponseEntity<?> updateStatusDelivery(@RequestParam String code,
-                                                  @RequestParam Status status){
+                                                  @RequestParam Status status) throws JsonProcessingException {
         return service.updateDelivery(code, status);
     }
 
@@ -49,6 +50,4 @@ public class TrackingWeb {
     public ResponseEntity<DeliveryDto> deleteDelivery(@RequestParam String code) {
         return ResponseEntity.ok(service.deleteDelivery(code));
     }
-
-
 }
