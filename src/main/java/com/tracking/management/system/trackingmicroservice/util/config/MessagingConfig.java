@@ -18,23 +18,10 @@ import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 public class MessagingConfig {
     private final CachingConnectionFactory cachingConnectionFactory;
 
-    @Value("${messaging.queue.client}")
-    private String clientValidateQueue;
+    @Value("${messaging.queue.tracking.status}")
+    private String trackingStatusQueue;
 
-    @Value("${messaging.queue.status}")
-    private String statusUpdateQueue;
-
-    @Value("${messaging.queue.stock}")
-    private String stockProcessQueue;
-
-    @Value("${messaging.queue.stock.cancelation}")
-    private String stockUpdateQueue;
-
-    @Value("${messaging.queue.payment}")
-    private String paymentProcessQueue;
-
-    @Value("${messaging.queue.transportation.cancel}")
-    private String transportSendCancelation;
+    private static final String EXCHANGE_FALBACK = "x.process-failure-transportation";
 
     public MessagingConfig(CachingConnectionFactory cachingConnectionFactory) {
         this.cachingConnectionFactory = cachingConnectionFactory;
@@ -42,40 +29,15 @@ public class MessagingConfig {
 
     @Bean
     public Queue createClientValidateQueue() {
-        return QueueBuilder.durable(clientValidateQueue)
-                .withArgument("x-dead-letter-exchange", "x.process-failure")
-                .withArgument("x-dead-letter-routing-key", "client")
+        return QueueBuilder.durable(trackingStatusQueue)
+                .withArgument("x-dead-letter-exchange", EXCHANGE_FALBACK)
+                .withArgument("x-dead-letter-routing-key", "transportation")
                 .build();
     }
 
     @Bean
-    public Queue createStatusUpdateQueue() {
-        return new Queue(statusUpdateQueue, true);
-    }
-
-    @Bean
-    public Queue createStockProcessQueue() {
-        return new Queue(stockProcessQueue, true);
-    }
-
-    @Bean
-    public Queue createStockCancelationQueue() {
-        return new Queue(stockUpdateQueue, true);
-    }
-
-    @Bean
-    public Queue createPaymentProcessQueue() {
-        return new Queue(paymentProcessQueue, true);
-    }
-
-    @Bean
-    public Queue createTransportationCancelQueue() {
-        return new Queue(transportSendCancelation, true);
-    }
-
-    @Bean
     public RetryOperationsInterceptor retryInterceptor() {
-        return RetryInterceptorBuilder.stateless().maxAttempts(3)
+        return RetryInterceptorBuilder.stateless().maxAttempts(5)
                 .backOffOptions(2000, 2.0, 100000)
                 .recoverer(new RejectAndDontRequeueRecoverer())
                 .build();
@@ -93,12 +55,13 @@ public class MessagingConfig {
         return factory;
     }
 
+
     @Bean
     public Declarables createDeadLetterSchema() {
         return new Declarables(
-                new DirectExchange("x.process-failure"),
-                new Queue("q.fall-back-process"),
-                new Binding("q.fall-back-process", Binding.DestinationType.QUEUE, "x.process-failure", "client", null)
+                new DirectExchange(EXCHANGE_FALBACK),
+                new Queue("q.fall-back-process-transportation"),
+                new Binding(trackingStatusQueue, Binding.DestinationType.QUEUE, EXCHANGE_FALBACK, "transportation", null)
         );
     }
 
