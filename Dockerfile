@@ -3,7 +3,7 @@
 #
 FROM maven:3.9.6-amazoncorretto-21 AS build
 
-WORKDIR /order-server
+WORKDIR /logistics-server
 
 COPY pom.xml .
 RUN mvn -B dependency:go-offline
@@ -16,10 +16,10 @@ RUN mvn -B package -DskipTests
 #
 FROM amazoncorretto:21-alpine-jdk
 
-WORKDIR /tracking-server
+WORKDIR /logistics-server
 
-COPY --from=build /tracking-server/target/*.jar ./tracking-server.jar
+COPY --from=build /logistics-server/target/*.jar ./logistics-server.jar
 
 EXPOSE 7079
 
-ENTRYPOINT ["java","-jar","order-server.jar"]
+ENTRYPOINT ["java","-jar","logistics-server.jar"]

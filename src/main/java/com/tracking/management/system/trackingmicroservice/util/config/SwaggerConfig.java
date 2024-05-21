@@ -15,7 +15,8 @@ public class SwaggerConfig {
                         new Info()
                                 .title("Microsserviço para controle entregas")
                                 .description("APIs para cadastro e atualização de entregas")
-                                .version("1.0.0")
-                ).addServersItem(new Server().url("http://localhost:7071/order-management-system/tracking-microservice"));
+                                .version("1.0.0"))
+                .addServersItem(new Server().url("http://localhost:7071/order-management-system/tracking-microservice"))
+                .addServersItem(new Server().url("http://localhost:7079"));
     }
 }
