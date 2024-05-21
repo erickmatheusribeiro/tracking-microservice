@@ -19,26 +19,26 @@ public class TarifWeb {
     private TarifGateway service;
 
     @Operation(summary = "Efetuar a inclusão de uma tarifa")
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> insertTarif(@RequestBody TarifDto dto) {
         return service.insertTarif(dto);
     }
 
     @Operation(summary = "Listar tarifa e prazo de entrega")
-    @GetMapping(value="/{cep}")
+    @GetMapping(value="/{cep}", produces = "application/json")
     public ResponseEntity<TarifDto> validCep(@PathVariable String cep) {
         return ResponseEntity.ok(service.findByCep(cep));
     }
 
     @Operation(summary = "Calcular valor e prazo de entrega")
-    @GetMapping(value = "/shipment/{cep}", consumes = "application/json")
+    @GetMapping(value = "/shipment/{cep}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TarifDto> calculateShipment(@PathVariable(name = "cep") String cep,
                                                       @RequestBody List<ShipmentDto> dto) {
         return ResponseEntity.ok(service.calculateTarif(cep, dto));
     }
 
     @Operation(summary = "Efetuar alteração da tarifa")
-    @PutMapping
+    @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateTarif(@RequestBody TarifDto dto) {
         return service.updateTarif(dto);
     }
