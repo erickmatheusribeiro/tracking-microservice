@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    private static final String GATEWAY_URL = "http://localhost:7071/order-management-system/customers-microservice";
+    private static final String GATEWAY_URL = "http://localhost:7071/order-management-system/tracking-microservice";
 
     @Bean
     public OpenAPI apiDocConfig() {
